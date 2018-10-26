@@ -1,8 +1,8 @@
-#define CATCH_CONFIG_MAIN
+#define CATCH_CONFIG_MAIN //Have catch provide our main function
 #include "catch.hpp"
-#include "tree.cc"
+#include "tree.cc" //Then include all the other functions we will need
 
-TEST_CASE( "Trees! Trees should be able to store data, and all four relevant functions should work", "[Tree]" ) 
+TEST_CASE( "Trees! Trees should be able to store data, and all four relevant functions should work.", "[Tree]" ) 
 {
     /*First we set up our trees. We build from the leaves up, so the code looks a bit strange, but it follows:
     Tree tree_key_identity is a tree with key "key" and an identifying integer, which is then assigned to value,
@@ -14,7 +14,7 @@ TEST_CASE( "Trees! Trees should be able to store data, and all four relevant fun
          4       7
         / \       \
       -3   2       5
-      / \   \     / \ 
+      / \   \     / \
      4   5   7   0   4
      
     Which should be sufficient to test all of our features.
@@ -23,7 +23,7 @@ TEST_CASE( "Trees! Trees should be able to store data, and all four relevant fun
     */
     tree_ptr_t tree_4_01   = create_tree(  4,  1);
     tree_ptr_t tree_5_02   = create_tree(  5,  2);
-    tree_ptr_t tree_n3_03  = create_tree( -3,  3,   tree_4_01, tree_5_02); //n here stands for negative
+    tree_ptr_t tree_n3_03  = create_tree( -3,  3,   tree_4_01, tree_5_02); //n here stands for negative, can't use the - sign in the name or else it causes an error
     tree_ptr_t tree_7_04   = create_tree(  7,  4);
     tree_ptr_t tree_2_05   = create_tree(  2,  5,     nullptr, tree_7_04);
     tree_ptr_t tree_4_06   = create_tree(  4,  6,  tree_n3_03, tree_2_05);
@@ -76,17 +76,17 @@ TEST_CASE( "Trees! Trees should be able to store data, and all four relevant fun
         REQUIRE( node_at(tree_126_11, "RRR") == tree_4_08);
         REQUIRE( node_at(tree_126_11, "LRR") == tree_7_04);
         REQUIRE( node_at(tree_126_11, "R") == tree_7_10);
-        //And finally testing an invalid input:
+        //And finally testing some invalid inputs:
         REQUIRE( node_at(tree_126_11, "HOW DO I EXIT VI") == nullptr);
+        REQUIRE( node_at(tree_126_11, "LRLR") == nullptr);
     }
     
-    SECTION( "Destorying trees should remove them and clear the memory space." )
-    {
-        //First we will delete some trees, and then test path_to and node_at to make sure
-        destroy_tree(tree_n3_03);
-        destroy_tree(tree_5_09);
+    //Finally, we destroy the tree. There is no test for this, as the destroy function is not implemented to destroy a single branch
+    //of a tree (at least, it can't do it cleanly without raising errors) so all we can do is destroy the whole thing and check to
+    //confirm that there are no memory leaks, which valgrind informs me that there are not.
+    destroy_tree(tree_126_11);
+
 }
-        
         
         
         
